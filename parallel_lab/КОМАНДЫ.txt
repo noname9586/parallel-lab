@@ -1,0 +1,51 @@
+ПОРЯДОК ВЫПОЛНЕНИЯ (все команды из папки parallel_lab)
+
+0. Окружение
+   python -m venv .venv
+   Windows:      .venv\Scripts\activate
+   Linux/macOS:  source .venv/bin/activate
+   pip install -r requirements.txt
+   pytest --version
+   python -c "import os; print(os.cpu_count())"      <- число ядер для отчёта
+
+ВАЖНО: папка "задание5" лежит вне tests/, чтобы до задания 5 в наборе было ровно 24 теста.
+
+Задание 1 (скриншот):  pytest --collect-only -q
+Задание 2 (скриншот):  pytest -v --durations=5
+Задание 3 (скриншоты):
+   pytest -n 2
+   pytest -n 4
+   pytest -n auto
+   pytest -n 4 -v            <- смотреть метки [gw0], [gw1]...
+Задание 4, часть А (4 скриншота или один общий):
+   pytest --splits 4 --group 1
+   pytest --splits 4 --group 2
+   pytest --splits 4 --group 3
+   pytest --splits 4 --group 4
+   (если уже есть файл .test_durations, удалите его перед частью А, иначе разбиение будет не статическим)
+Задание 4, часть Б:
+   pytest --store-durations                 <- появится .test_durations, откройте его для скриншота
+   pytest --splits 4 --group 1 --splitting-algorithm least_duration
+   ... то же для групп 2, 3, 4
+
+Задание 5:
+   1) Скопируйте  задание5/test_profile_СЛОМАННЫЙ.py  в  tests/test_profile.py
+   2) pytest tests/test_profile.py -v               (8 passed)
+   3) pytest tests/test_profile.py -n 4 -v          (три раза подряд, скриншоты)
+   4) Замените tests/test_profile.py содержимым  задание5/test_profile_ИСПРАВЛЕННЫЙ.py
+   5) pytest tests/test_profile.py -n 4 -v          (три раза подряд, скриншоты)
+   Если при сломанной версии все 8 прошли — повторите запуск, ошибка плавающая.
+   Удалите profile.json перед запусками, если он остался.
+
+Задание 6:
+   git init
+   git add .
+   git commit -m "parallel lab"
+   Создайте репозиторий на GitHub, затем:
+   git remote add origin https://github.com/ВАШ_ЛОГИН/parallel_lab.git
+   git branch -M main
+   git push -u origin main
+   Перед push убедитесь, что в репозитории есть .test_durations
+   (создаётся командой pytest --store-durations) и нет .venv и profile.json.
+   Затем вкладка Actions -> скриншот и время каждого job-а.
+   Запускайте задание 6 с файлами tests/ без test_profile.py или с исправленным.
